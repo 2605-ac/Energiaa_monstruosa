@@ -1,0 +1,2847 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Energía monstruosa | Interfaces UAI</title>
+
+  <!--
+  ============================================================
+  1. CONFIGURACIÓN EDITABLE
+
+  Estos archivos deben estar junto al index:
+
+  - fondo.jpg
+  - envase.png
+  - programacion.png
+  - audio.mp3
+
+  Las evidencias sin archivo NO aparecen en la página.
+  ============================================================
+  -->
+
+  <script>
+    const CONFIG = {
+
+      // IMÁGENES PRINCIPALES
+      fondo: "fondo.jpg",
+      posicionFondo: "center",
+      oscuridadFondo: 0.12,
+
+      envase: "envase.png",
+
+      // DATOS DEL PROYECTO
+      proyecto: "Energía monstruosa",
+
+      integrantes: [
+        "Felipe Puentes",
+        "Antonia Caroca",
+        "Antonia Aracena"
+      ],
+
+      curso: "Diseño de Interfaces · UAI",
+      entrega: "Entrega 2 · Unidad 2 · 29 de octubre",
+
+      // MÚSICA DE FONDO
+      musica: {
+        archivo: "audio.mp3",
+        nombre: "Banda sonora de nuestra fábrica",
+        volumen: 0.25,
+        repetir: true
+      },
+
+      // AUDIO ADICIONAL OPCIONAL
+      // Se mantiene oculto mientras archivo esté vacío.
+      audioAdicional: {
+        archivo: "",
+        titulo: "¡Escucha la energía!",
+        descripcion: "Grabación de apoyo para la demostración."
+      },
+
+      // ENLACE AL REPOSITORIO
+      repositorio: "",
+
+      // EVIDENCIAS
+      // Solo aparecen las que tengan una ruta escrita.
+      evidencias: {
+        programacion: "programacion.png",
+
+        prototipo: "",
+        conexiones: "",
+
+        impresion: "",
+        soldadura: "",
+        interior: "",
+
+        video: ""
+      },
+
+      // EFECTOS DEL FONDO
+      serpentinas: 24,
+      destellos: 35,
+
+      // 5000 = 5 segundos
+      intervaloFrases: 5000,
+
+      frases: [
+        {
+          sonido: "¡BUUUM!",
+          texto: "Energía monstruosa",
+          color: "#c6ff00"
+        },
+        {
+          sonido: "¡GRRR!",
+          texto: "Ideas que rugen",
+          color: "#00dcff"
+        },
+        {
+          sonido: "¡BUUU!",
+          texto: "¡De miedo lo bueno!",
+          color: "#e4b4ff"
+        },
+        {
+          sonido: "¡RAAWR!",
+          texto: "Despierta a tu monstruo",
+          color: "#ff8ed4"
+        },
+        {
+          sonido: "¡ZAAAS!",
+          texto: "Seis luces. Mucha energía.",
+          color: "#c6ff00"
+        },
+        {
+          sonido: "¡AAAH!",
+          texto: "Del grito a la luz",
+          color: "#00dcff"
+        }
+      ]
+    };
+
+    /*
+    ==========================================================
+    2. TEXTOS DE LA PRESENTACIÓN
+    ==========================================================
+    */
+
+    const DIAPOSITIVAS = [
+
+      // ------------------------------------------------------
+      // 1. PORTADA
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "SISTEMA INTERACTIVO BASADO EN VOZ",
+
+        titulo: "Energía\nmonstruosa.",
+
+        descripcion:
+          "Recreamos el envase recolector de gritos de " +
+          "Monsters, Inc. y transformamos la intensidad " +
+          "de la voz en una respuesta luminosa.",
+
+        tarjetas: [
+          {
+            titulo: "Un grito",
+            texto:
+              "El micrófono del computador captura " +
+              "el sonido de la persona."
+          },
+          {
+            titulo: "Seis LEDs",
+            texto:
+              "La cantidad de luces encendidas " +
+              "representa la intensidad del grito."
+          },
+          {
+            titulo: "Una experiencia",
+            texto:
+              "Mientras más fuerte es el grito, " +
+              "más energía parece acumular el envase."
+          }
+        ],
+
+        medios: [
+          {
+            clave: "prototipo",
+            tipo: "imagen",
+            titulo: "Nuestro recolector de gritos",
+            pie: "Fotografía del prototipo terminado."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 2. CONCEPTO
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "01 / CONCEPTO E INTERACCIÓN",
+
+        titulo: "Tu voz.\nSu energía.",
+
+        descripcion:
+          "Tomamos como referencia los envases que almacenan " +
+          "los gritos de los niños en la película. " +
+          "Nuestra propuesta representa esa energía mediante luz.",
+
+        tarjetas: [
+          {
+            titulo: "Inspiración",
+            texto:
+              "El recolector de gritos de Monsters, Inc. " +
+              "es el punto de partida visual y conceptual."
+          },
+          {
+            titulo: "Participación",
+            texto:
+              "La persona grita frente al micrófono " +
+              "del computador y modifica la intensidad de su voz."
+          },
+          {
+            titulo: "Respuesta",
+            texto:
+              "El objeto responde encendiendo más o menos LEDs, " +
+              "haciendo visible una característica del sonido."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 3. FUNCIONAMIENTO
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "02 / DEL SONIDO A LA ACCIÓN",
+
+        titulo: "Así funciona\nel monstruo.",
+
+        descripcion:
+          "Python analiza el sonido del micrófono y envía " +
+          "un valor de 0 a 255 al Arduino mediante USB. " +
+          "El Arduino utiliza ese valor para controlar la tira LED.",
+
+        flujo: [
+          "Micrófono del computador",
+          "Python en Visual Studio Code",
+          "Arduino mediante USB",
+          "Tira de 6 LEDs"
+        ],
+
+        tarjetas: [
+          {
+            titulo: "Entrada",
+            texto:
+              "El micrófono captura el sonido. " +
+              "Python calcula su nivel y procesa la señal."
+          },
+          {
+            titulo: "Comunicación",
+            texto:
+              "El computador envía el valor procesado " +
+              "por USB mediante comunicación serie."
+          },
+          {
+            titulo: "Salida",
+            texto:
+              "El programa del Arduino determina " +
+              "cuántos LEDs de la tira deben encenderse."
+          }
+        ],
+
+        medios: [
+          {
+            clave: "programacion",
+            tipo: "imagen",
+            titulo: "Del grito a la luz",
+            pie:
+              "Resumen visual de la programación: " +
+              "micrófono, Python, Arduino y seis LEDs."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 4. MAPEO
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "03 / REGLA DE FUNCIONAMIENTO",
+
+        titulo: "Más volumen.\nMás luces.",
+
+        descripcion:
+          "La interacción depende del nivel sonoro. " +
+          "Por encima del umbral establecido, un grito más intenso " +
+          "produce una mayor cantidad de LEDs encendidos, " +
+          "hasta un máximo de seis.",
+
+        tarjetas: [
+          {
+            titulo: "Calibrar",
+            texto:
+              "Al iniciar, Python toma aproximadamente " +
+              "dos segundos de referencia del ruido ambiente."
+          },
+          {
+            titulo: "Procesar",
+            texto:
+              "Se aplica un umbral y se suavizan las variaciones " +
+              "para reducir respuestas bruscas."
+          },
+          {
+            titulo: "Representar",
+            texto:
+              "Arduino convierte el nivel recibido " +
+              "en una cantidad de LEDs encendidos."
+          }
+        ],
+
+        tabla: {
+          columnas: [
+            "Entrada",
+            "Procesamiento",
+            "Respuesta esperada"
+          ],
+
+          filas: [
+            [
+              "Sonido bajo el umbral",
+              "El nivel objetivo se mantiene en cero.",
+              "Las luces disminuyen hasta apagarse."
+            ],
+            [
+              "Grito de intensidad intermedia",
+              "El nivel procesado aumenta parcialmente.",
+              "Se enciende una parte de la tira."
+            ],
+            [
+              "Grito de intensidad alta",
+              "El nivel procesado se acerca al máximo.",
+              "Se enciende una mayor cantidad de LEDs."
+            ]
+          ]
+        }
+      },
+
+      // ------------------------------------------------------
+      // 5. HARDWARE
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "04 / HARDWARE Y ALIMENTACIÓN",
+
+        titulo: "Seis luces.\nUn Arduino.",
+
+        descripcion:
+          "El montaje utiliza el micrófono del computador, " +
+          "un Arduino y una tira de seis LEDs programables. " +
+          "La alimentación actual se realiza mediante USB.",
+
+        tarjetas: [
+          {
+            titulo: "Componentes",
+            texto:
+              "Computador con micrófono, Arduino, " +
+              "tira LED programable y cableado."
+          },
+          {
+            titulo: "Colores",
+            texto:
+              "Los LEDs tienen un degradado de amarillo a rojo, " +
+              "reforzando la idea de energía acumulada."
+          },
+          {
+            titulo: "Alimentación",
+            texto:
+              "Actualmente usamos USB. Queda pendiente " +
+              "incorporar la fuente externa solicitada " +
+              "en la pauta para tiras LED."
+          }
+        ],
+
+        medios: [
+          {
+            clave: "conexiones",
+            tipo: "imagen",
+            titulo: "Esquema eléctrico del montaje",
+            pie:
+              "Diagrama de conexiones del Arduino, " +
+              "shield si corresponde y tira LED."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 6. CONSTRUCCIÓN
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "05 / MANUFACTURA Y ENSAMBLE",
+
+        titulo: "Así nació\nel recolector.",
+
+        descripcion:
+          "Fabricamos la carcasa con impresión 3D y filamento " +
+          "de la universidad. Después la pintamos para representar " +
+          "los colores del envase de la película.",
+
+        tarjetas: [
+          {
+            titulo: "Impresión 3D",
+            texto:
+              "Utilizamos las impresoras de la universidad " +
+              "para construir el cuerpo del envase."
+          },
+          {
+            titulo: "Pintura",
+            texto:
+              "Como no contábamos con filamentos de los colores " +
+              "necesarios, pintamos las piezas impresas."
+          },
+          {
+            titulo: "Ensamble",
+            texto:
+              "Integramos componentes del kit de Arduino " +
+              "y materiales facilitados por el profesor."
+          }
+        ],
+
+        medios: [
+          {
+            clave: "impresion",
+            tipo: "imagen",
+            titulo: "Manufactura",
+            pie: "Registro de impresión, piezas y terminaciones."
+          },
+          {
+            clave: "soldadura",
+            tipo: "imagen",
+            titulo: "Soldadura",
+            pie: "Registro de conexión de los cables."
+          },
+          {
+            clave: "interior",
+            tipo: "imagen",
+            titulo: "Interior final",
+            pie: "Organización de los componentes dentro del envase."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 7. PRUEBAS
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "06 / PRUEBAS Y MEJORAS",
+
+        titulo: "Probar.\nAjustar. Repetir.",
+
+        descripcion:
+          "Durante el proceso detectamos problemas de sensibilidad, " +
+          "soldadura y conexión. Fuimos corrigiéndolos hasta lograr " +
+          "que los LEDs respondieran correctamente " +
+          "a la intensidad del grito.",
+
+        tarjetas: [
+          {
+            titulo: "Sensibilidad",
+            texto:
+              "Al principio las luces cambiaban poco o no se " +
+              "activaban. Ajustamos el procesamiento y el umbral."
+          },
+          {
+            titulo: "Conexiones",
+            texto:
+              "Revisamos las soldaduras de los cables " +
+              "a los LEDs y las conexiones con Arduino."
+          },
+          {
+            titulo: "Resultado",
+            texto:
+              "Confirmamos el funcionamiento de los LEDs " +
+              "y el degradado de amarillo a rojo."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 8. DEMOSTRACIÓN
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "07 / DEMOSTRACIÓN EN VIVO",
+
+        titulo: "Ahora,\n¡a gritar!",
+
+        descripcion:
+          "Mostraremos cómo el envase responde a distintos " +
+          "niveles de voz. Antes de calibrar, pausaremos " +
+          "la música y los audios de la presentación.",
+
+        demo: true,
+
+        tarjetas: [
+          {
+            titulo: "1. Preparar",
+            texto:
+              "Conectar Arduino, ejecutar Python " +
+              "y guardar silencio durante la calibración."
+          },
+          {
+            titulo: "2. Interactuar",
+            texto:
+              "Variar la intensidad del grito frente " +
+              "al micrófono del computador."
+          },
+          {
+            titulo: "3. Observar",
+            texto:
+              "Comparar la cantidad de LEDs encendidos " +
+              "cuando cambia la intensidad."
+          }
+        ],
+
+        medios: [
+          {
+            clave: "video",
+            tipo: "video",
+            titulo: "Registro del funcionamiento",
+            pie:
+              "Video real de respaldo de la interacción " +
+              "con el prototipo."
+          }
+        ]
+      },
+
+      // ------------------------------------------------------
+      // 9. CONCLUSIÓN
+      // ------------------------------------------------------
+
+      {
+        etiqueta: "08 / APRENDIZAJES Y DOCUMENTACIÓN",
+
+        titulo: "Una idea.\nMuchos aprendizajes.",
+
+        descripcion:
+          "Aprendimos a integrar distintas tecnologías " +
+          "para representar una idea creativa: convertir " +
+          "el grito en una experiencia física y visual.",
+
+        tarjetas: [
+          {
+            titulo: "Programación",
+            texto:
+              "Profundizamos en el uso de Arduino " +
+              "y en la relación entre la voz y la iluminación."
+          },
+          {
+            titulo: "Fabricación",
+            texto:
+              "Aprendimos a utilizar impresión 3D " +
+              "y a terminar las piezas mediante pintura."
+          },
+          {
+            titulo: "Comunicación",
+            texto:
+              "Perfeccionamos el diseño de páginas web " +
+              "y la forma de presentar el proceso."
+          }
+        ],
+
+        documentacion: true
+      }
+
+    ];
+  </script>
+
+  <style>
+    /*
+    ==========================================================
+    3. COLORES Y ESTILOS GENERALES
+    ==========================================================
+    */
+
+    :root {
+      --celeste: #00dcff;
+      --lima: #c6ff00;
+      --morado: #a34dff;
+      --rosa: #ff6dc6;
+      --tinta: #172340;
+      --blanco: #fffef5;
+      --oscuridad: 0.12;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--tinta);
+      background: var(--celeste);
+      font-family: "Segoe UI", Arial, sans-serif;
+      overflow-x: hidden;
+      isolation: isolate;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+      outline: 4px solid var(--morado);
+      outline-offset: 5px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /*
+    ==========================================================
+    4. FONDO
+    ==========================================================
+    */
+
+    .fondo {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+
+      background:
+        radial-gradient(
+          ellipse at 10% 15%,
+          #b5ffff,
+          transparent 45%
+        ),
+        radial-gradient(
+          ellipse at 90% 90%,
+          #a34dff,
+          transparent 50%
+        ),
+        linear-gradient(135deg, #00dcff, #48d9f2, #8671ff);
+    }
+
+    .foto-fondo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fondo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 20, 45, var(--oscuridad));
+    }
+
+    #efectos {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .manchas {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .mancha {
+      position: absolute;
+      width: 170px;
+      height: 115px;
+      background: var(--morado);
+      border-radius: 39% 61% 55% 45% / 58% 34% 66% 42%;
+      opacity: 0.6;
+      transform: rotate(-25deg);
+    }
+
+    .mancha:first-child {
+      left: -90px;
+      top: 20%;
+    }
+
+    .mancha:last-child {
+      right: 8%;
+      bottom: -60px;
+    }
+
+    /*
+    ==========================================================
+    5. CONTENEDOR Y CABECERA
+    ==========================================================
+    */
+
+    .web {
+      width: min(1500px, 100%);
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: auto;
+      padding: 24px clamp(20px, 5vw, 78px);
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cabecera,
+    .pie,
+    .herramientas,
+    .navegacion {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cabecera,
+    .pie {
+      justify-content: space-between;
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px 10px 10px;
+
+      background: var(--blanco);
+      border: 3px solid var(--tinta);
+      border-radius: 18px;
+      box-shadow: 5px 5px 0 var(--tinta);
+      transform: rotate(-2deg);
+    }
+
+    .ojo {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+
+      background: var(--lima);
+      border: 2px solid var(--tinta);
+      border-radius: 50%;
+    }
+
+    .ojo::before {
+      content: "";
+      width: 25px;
+      height: 25px;
+
+      background:
+        radial-gradient(
+          circle at 57% 40%,
+          white 0 8%,
+          transparent 10%
+        ),
+        radial-gradient(
+          circle,
+          var(--tinta) 0 27%,
+          #32b9d3 29% 49%,
+          white 51%
+        );
+
+      border: 2px solid var(--tinta);
+      border-radius: 50%;
+    }
+
+    .marca strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .marca small {
+      display: block;
+      margin-top: 3px;
+      font-size: 10px;
+    }
+
+    .herramientas {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .boton {
+      display: inline-block;
+      padding: 10px 15px;
+
+      color: var(--tinta);
+      background: var(--blanco);
+      border: 2px solid var(--tinta);
+      border-radius: 999px;
+      box-shadow: 3px 3px 0 var(--tinta);
+
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .boton:hover:not(:disabled) {
+      transform: translateY(-3px);
+    }
+
+    .boton:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .boton-lima {
+      background: var(--lima);
+    }
+
+    /*
+    ==========================================================
+    6. MÚSICA Y AUDIO
+    ==========================================================
+    */
+
+    .panel-sonido {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .caja-sonido {
+      min-width: 0;
+      padding: 16px 20px;
+      background: rgba(255, 254, 245, 0.97);
+
+      border: 3px solid var(--tinta);
+      border-radius: 17px;
+      box-shadow: 5px 5px 0 var(--tinta);
+    }
+
+    .caja-sonido h2 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .caja-sonido p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .controles-musica,
+    .control-volumen {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .controles-musica {
+      margin-top: 13px;
+    }
+
+    .control-volumen {
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .control-volumen input {
+      width: 110px;
+      accent-color: var(--morado);
+      cursor: pointer;
+    }
+
+    .control-volumen output {
+      min-width: 35px;
+    }
+
+    .reproductor {
+      display: block;
+      width: 100%;
+      height: 40px;
+      margin-top: 12px;
+    }
+
+    /*
+    ==========================================================
+    7. CONTENIDO
+    ==========================================================
+    */
+
+    .escena {
+      flex: 1;
+      padding: 42px 0 30px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .bloque-superior {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 225px;
+      align-items: center;
+      gap: 35px;
+    }
+
+    .contenido {
+      min-width: 0;
+    }
+
+    .entrando {
+      animation: aparecer 0.5s ease both;
+    }
+
+    .etiqueta {
+      display: inline-block;
+      max-width: 100%;
+      margin: 0;
+      padding: 9px 14px;
+
+      background: var(--lima);
+      border: 2px solid var(--tinta);
+      border-radius: 6px;
+      box-shadow: 4px 4px 0 var(--tinta);
+
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      line-height: 1.5;
+      transform: rotate(-2deg);
+    }
+
+    h1 {
+      margin: 24px 0 20px;
+      color: var(--blanco);
+
+      font-family: "Arial Black", "Segoe UI", sans-serif;
+      font-size: clamp(42px, 6vw, 88px);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -3px;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+
+      -webkit-text-stroke: 2px var(--tinta);
+
+      text-shadow:
+        4px 4px 0 var(--tinta),
+        8px 8px 0 var(--morado);
+    }
+
+    .descripcion {
+      margin: 0;
+      padding: 15px 19px;
+      background: rgba(255, 254, 245, 0.97);
+
+      border: 2px solid var(--tinta);
+      border-radius: 15px;
+      box-shadow: 4px 4px 0 var(--tinta);
+
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    /*
+    ==========================================================
+    8. ENVASE Y FRASES
+    ==========================================================
+    */
+
+    .zona-envase {
+      display: flex;
+      justify-content: center;
+      padding-top: 135px;
+    }
+
+    .envase {
+      position: relative;
+      width: 155px;
+      isolation: isolate;
+    }
+
+    .imagen-envase {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 4;
+      object-fit: contain;
+
+      background: #245576;
+      border: 3px solid var(--tinta);
+      border-radius: 24px;
+
+      box-shadow:
+        7px 8px 0 var(--tinta),
+        0 0 35px rgba(198, 255, 0, 0.5);
+
+      animation: flotar 4s ease-in-out infinite;
+    }
+
+    .sombra-envase {
+      position: absolute;
+      left: 10%;
+      bottom: -25px;
+      z-index: -1;
+      width: 85%;
+      height: 17px;
+
+      background: rgba(23, 35, 64, 0.3);
+      border-radius: 50%;
+      filter: blur(5px);
+    }
+
+    .globo {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 25px);
+      z-index: 2;
+
+      width: 210px;
+      min-height: 103px;
+      padding: 16px 12px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+
+      background: var(--lima);
+      border: 3px solid var(--tinta);
+      border-radius: 23px;
+      box-shadow: 5px 6px 0 var(--tinta);
+
+      text-align: center;
+      transform: translateX(-50%) rotate(-8deg);
+      transform-origin: 50% 120%;
+    }
+
+    .globo::after {
+      content: "";
+      position: absolute;
+      left: 47%;
+      bottom: -14px;
+      width: 21px;
+      height: 21px;
+
+      background: inherit;
+      border-right: 3px solid var(--tinta);
+      border-bottom: 3px solid var(--tinta);
+      transform: rotate(45deg);
+    }
+
+    .sonido {
+      position: relative;
+      z-index: 1;
+      font-family: "Arial Black", sans-serif;
+      font-size: 29px;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .frase {
+      position: relative;
+      z-index: 1;
+      max-width: 175px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .explotando {
+      animation: explosion 0.7s ease both;
+    }
+
+    /*
+    ==========================================================
+    9. TARJETAS Y TABLAS
+    ==========================================================
+    */
+
+    .tarjetas {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 35px;
+    }
+
+    .tarjeta {
+      min-width: 0;
+      padding: 22px;
+
+      border: 3px solid var(--tinta);
+      border-radius: 18px;
+      box-shadow: 6px 6px 0 var(--tinta);
+
+      transition: transform 0.2s;
+    }
+
+    .tarjeta:nth-child(3n + 1) {
+      background: var(--celeste);
+      transform: rotate(-1deg);
+    }
+
+    .tarjeta:nth-child(3n + 2) {
+      background: var(--lima);
+      transform: rotate(1deg);
+    }
+
+    .tarjeta:nth-child(3n) {
+      color: white;
+      background: var(--morado);
+      transform: rotate(-1deg);
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-5px);
+    }
+
+    .tarjeta h2 {
+      margin: 0 0 12px;
+      font-size: 23px;
+      line-height: 1.15;
+    }
+
+    .tarjeta p {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .flujo {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .flujo li {
+      min-width: 0;
+      padding: 15px;
+
+      background: var(--blanco);
+      border: 2px solid var(--tinta);
+      border-radius: 12px;
+      box-shadow: 3px 3px 0 var(--tinta);
+
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .paso {
+      display: block;
+      margin-bottom: 6px;
+      color: #6b2ab8;
+      font-size: 11px;
+    }
+
+    .contenedor-tabla {
+      margin-top: 28px;
+      overflow-x: auto;
+
+      background: var(--blanco);
+      border: 3px solid var(--tinta);
+      border-radius: 14px;
+      box-shadow: 5px 5px 0 var(--tinta);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    th,
+    td {
+      padding: 15px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--lima);
+    }
+
+    td {
+      border-top: 1px solid #d9dce3;
+    }
+
+    /*
+    ==========================================================
+    10. EVIDENCIAS
+
+    No se generan espacios vacíos.
+    ==========================================================
+    */
+
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 260px), 1fr)
+      );
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .evidencia {
+      min-width: 0;
+      margin: 0;
+      padding: 12px;
+
+      background: var(--blanco);
+      border: 3px solid var(--tinta);
+      border-radius: 18px;
+      box-shadow: 5px 5px 0 var(--tinta);
+    }
+
+    .evidencia img,
+    .evidencia video {
+      display: block;
+      width: 100%;
+      max-height: 900px;
+      object-fit: contain;
+      background: #e8edf2;
+      border-radius: 9px;
+    }
+
+    .evidencia figcaption {
+      padding: 12px 5px 3px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .evidencia figcaption strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .documentacion {
+      margin-top: 28px;
+      padding: 22px;
+
+      background: var(--blanco);
+      border: 3px solid var(--tinta);
+      border-radius: 17px;
+      box-shadow: 5px 5px 0 var(--tinta);
+    }
+
+    .documentacion h2 {
+      margin: 0 0 12px;
+      font-size: 21px;
+    }
+
+    .documentacion ul {
+      margin: 0 0 20px;
+      padding-left: 22px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .demo-controles {
+      margin-top: 25px;
+    }
+
+    /*
+    ==========================================================
+    11. NAVEGACIÓN Y PIE
+    ==========================================================
+    */
+
+    .pie {
+      padding: 18px 0;
+    }
+
+    .autor {
+      max-width: 48%;
+      padding: 10px 14px;
+
+      background: var(--blanco);
+      border: 2px solid var(--tinta);
+      border-radius: 12px;
+
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .autor strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .flecha {
+      width: 45px;
+      height: 45px;
+
+      color: var(--tinta);
+      background: var(--blanco);
+      border: 2px solid var(--tinta);
+      border-radius: 50%;
+      box-shadow: 3px 3px 0 var(--tinta);
+
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .flecha:hover:not(:disabled) {
+      background: var(--lima);
+    }
+
+    .flecha:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .contador {
+      min-width: 65px;
+      padding: 8px 12px;
+
+      background: var(--blanco);
+      border: 2px solid var(--tinta);
+      border-radius: 999px;
+
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .indicadores {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .indicador {
+      width: 13px;
+      height: 13px;
+      padding: 0;
+
+      background: var(--blanco);
+      border: 2px solid var(--tinta);
+      border-radius: 50%;
+
+      cursor: pointer;
+    }
+
+    .indicador.activo {
+      background: var(--lima);
+      transform: scale(1.3);
+    }
+
+    .progreso {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      z-index: 5;
+
+      width: 100%;
+      height: 6px;
+      background: rgba(23, 35, 64, 0.15);
+    }
+
+    .progreso span {
+      display: block;
+      width: 0;
+      height: 100%;
+
+      background: var(--lima);
+      transition: width 0.4s;
+    }
+
+    .estado {
+      align-self: flex-end;
+      margin: 5px 0 10px;
+      padding: 8px 12px;
+
+      background: var(--blanco);
+      border-radius: 8px;
+
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .estado:empty {
+      display: none;
+    }
+
+    /*
+    ==========================================================
+    12. ANIMACIONES Y RESPONSIVE
+    ==========================================================
+    */
+
+    @keyframes aparecer {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes flotar {
+      0%, 100% {
+        transform: translateY(0) rotate(7deg);
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(3deg);
+      }
+    }
+
+    @keyframes explosion {
+      0% {
+        opacity: 0;
+        transform:
+          translateX(-50%)
+          translateY(25px)
+          rotate(4deg)
+          scale(0.3);
+      }
+
+      60% {
+        opacity: 1;
+        transform:
+          translateX(-50%)
+          translateY(-5px)
+          rotate(-12deg)
+          scale(1.1);
+      }
+
+      100% {
+        opacity: 1;
+        transform:
+          translateX(-50%)
+          rotate(-8deg)
+          scale(1);
+      }
+    }
+
+    body.pausado .imagen-envase,
+    body.pausado .explotando {
+      animation: none;
+    }
+
+    @media (max-width: 760px) {
+      .web {
+        padding: 20px;
+      }
+
+      .cabecera {
+        align-items: flex-start;
+      }
+
+      .marca {
+        gap: 8px;
+      }
+
+      .marca strong {
+        font-size: 11px;
+      }
+
+      .marca small {
+        font-size: 9px;
+      }
+
+      .herramientas {
+        max-width: 130px;
+      }
+
+      .boton {
+        padding: 9px 11px;
+        font-size: 11px;
+      }
+
+      .panel-sonido,
+      .bloque-superior,
+      .tarjetas {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(40px, 10vw, 70px);
+        letter-spacing: -2px;
+        -webkit-text-stroke: 1.5px var(--tinta);
+      }
+
+      .descripcion {
+        font-size: 16px;
+      }
+
+      .zona-envase {
+        padding: 125px 0 20px;
+      }
+
+      .envase {
+        width: 130px;
+      }
+
+      .flujo {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pie {
+        flex-wrap: wrap;
+      }
+
+      .autor {
+        max-width: 100%;
+      }
+
+      .indicadores {
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- FONDO -->
+  <div class="fondo" aria-hidden="true">
+    <img
+      class="foto-fondo"
+      id="fotoFondo"
+      alt=""
+      hidden
+    >
+  </div>
+
+  <div class="manchas" aria-hidden="true">
+    <span class="mancha"></span>
+    <span class="mancha"></span>
+  </div>
+
+  <canvas id="efectos" aria-hidden="true"></canvas>
+
+  <!-- MÚSICA -->
+  <audio id="musicaFondo" preload="metadata"></audio>
+
+  <div class="web">
+
+    <!-- CABECERA -->
+    <header class="cabecera">
+
+      <div class="marca">
+        <span class="ojo" aria-hidden="true"></span>
+
+        <div>
+          <strong>MONSTERS, INC.</strong>
+          <small>DEL GRITO A LA LUZ</small>
+        </div>
+      </div>
+
+      <div class="herramientas">
+
+        <button
+          class="boton boton-lima"
+          id="botonEfectos"
+          type="button"
+          aria-pressed="true"
+        >
+          ✦ Efectos: sí
+        </button>
+
+        <button
+          class="boton"
+          id="botonPantalla"
+          type="button"
+        >
+          ⛶ Expandir
+        </button>
+
+      </div>
+    </header>
+
+    <!-- PANEL DE SONIDO -->
+    <section
+      class="panel-sonido"
+      id="panelSonido"
+      aria-label="Música y audio"
+    >
+
+      <div class="caja-sonido" id="cajaMusica">
+
+        <h2>♫ Banda sonora</h2>
+        <p id="nombreMusica"></p>
+
+        <div class="controles-musica">
+
+          <button
+            class="boton boton-lima"
+            id="botonMusica"
+            type="button"
+            aria-pressed="false"
+          >
+            ▶ Reproducir música
+          </button>
+
+          <div class="control-volumen">
+
+            <label for="volumenMusica">Volumen</label>
+
+            <input
+              id="volumenMusica"
+              type="range"
+              min="0"
+              max="100"
+              value="25"
+            >
+
+            <output
+              id="valorVolumen"
+              for="volumenMusica"
+            >
+              25%
+            </output>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="caja-sonido" id="cajaAudio">
+
+        <h2 id="tituloAudio"></h2>
+        <p id="descripcionAudio"></p>
+
+        <audio
+          class="reproductor"
+          id="audioDemo"
+          controls
+          preload="metadata"
+          aria-label="Audio adicional de demostración"
+        ></audio>
+
+      </div>
+    </section>
+
+    <!-- PRESENTACIÓN -->
+    <main class="escena" aria-labelledby="titulo">
+
+      <div class="bloque-superior">
+
+        <section class="contenido" id="contenido">
+          <p class="etiqueta" id="etiqueta"></p>
+          <h1 id="titulo"></h1>
+          <p class="descripcion" id="descripcion"></p>
+        </section>
+
+        <div class="zona-envase" aria-hidden="true">
+          <div class="envase">
+
+            <div class="globo" id="globo">
+              <strong class="sonido" id="sonido"></strong>
+              <span class="frase" id="frase"></span>
+            </div>
+
+            <img
+              class="imagen-envase"
+              id="imagenEnvase"
+              alt=""
+              draggable="false"
+            >
+
+            <div class="sombra-envase"></div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <ol
+        class="flujo"
+        id="flujo"
+        aria-label="Etapas del sistema"
+        hidden
+      ></ol>
+
+      <div class="tarjetas" id="tarjetas"></div>
+
+      <div
+        class="contenedor-tabla"
+        id="contenedorTabla"
+        hidden
+      ></div>
+
+      <div class="demo-controles" id="demoControles" hidden>
+        <button
+          class="boton boton-lima"
+          id="pausarSonidos"
+          type="button"
+        >
+          ⏸ Pausar sonidos para la demostración
+        </button>
+      </div>
+
+      <!-- Solo muestra imágenes o videos con archivo. -->
+      <div class="galeria" id="galeria" hidden></div>
+
+      <section
+        class="documentacion"
+        id="documentacion"
+        aria-labelledby="tituloDocumentacion"
+        hidden
+      >
+
+        <h2 id="tituloDocumentacion">
+          Documentación del proyecto
+        </h2>
+
+        <ul>
+          <li>Código de Python y Arduino.</li>
+          <li>Video del funcionamiento real.</li>
+          <li>Esquema eléctrico de conexiones.</li>
+          <li>Fotografías de manufactura y soldadura.</li>
+          <li>Fotografías del ensamble interno final.</li>
+        </ul>
+
+        <div id="enlaceRepositorio"></div>
+
+      </section>
+    </main>
+
+    <!-- PIE -->
+    <footer class="pie">
+
+      <div class="autor">
+        <strong id="integrantes"></strong>
+        <div id="curso"></div>
+        <div id="entrega"></div>
+      </div>
+
+      <nav
+        class="indicadores"
+        id="indicadores"
+        aria-label="Elegir diapositiva"
+      ></nav>
+
+      <div class="navegacion">
+
+        <button
+          class="flecha"
+          id="anterior"
+          type="button"
+          aria-label="Diapositiva anterior"
+        >
+          ←
+        </button>
+
+        <span
+          class="contador"
+          id="contador"
+          aria-live="polite"
+          aria-atomic="true"
+        ></span>
+
+        <button
+          class="flecha"
+          id="siguiente"
+          type="button"
+          aria-label="Diapositiva siguiente"
+        >
+          →
+        </button>
+
+      </div>
+    </footer>
+
+    <p class="estado" id="estado" role="status"></p>
+
+  </div>
+
+  <div class="progreso" aria-hidden="true">
+    <span id="progreso"></span>
+  </div>
+
+  <noscript>
+    Activa JavaScript para visualizar la presentación.
+  </noscript>
+
+  <!--
+  ============================================================
+  13. FUNCIONAMIENTO
+  ============================================================
+  -->
+
+  <script>
+    // ========================================================
+    // A. ESTADO GENERAL
+    // ========================================================
+
+    const $ = (id) => document.getElementById(id);
+    const total = DIAPOSITIVAS.length;
+
+    const preferencia = matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    let actual = 0;
+    let efectosActivos = !preferencia.matches;
+
+    const videos = new Set();
+    const avisos = new Map();
+
+    document.title = CONFIG.proyecto + " | Interfaces UAI";
+
+    $("integrantes").textContent =
+      CONFIG.integrantes.join(" · ");
+
+    $("curso").textContent = CONFIG.curso;
+    $("entrega").textContent = CONFIG.entrega;
+
+    function avisar(clave, texto) {
+      if (texto) {
+        avisos.set(clave, texto);
+      } else {
+        avisos.delete(clave);
+      }
+
+      $("estado").textContent =
+        Array.from(avisos.values()).join(" ");
+    }
+
+    // ========================================================
+    // B. MÚSICA Y AUDIO
+    // ========================================================
+
+    const musica = $("musicaFondo");
+    const audioDemo = $("audioDemo");
+
+    let iniciandoMusica = false;
+
+    function limitarVolumen(valor) {
+      const numero = Number(valor);
+
+      return Number.isFinite(numero)
+        ? Math.min(1, Math.max(0, numero))
+        : 0.25;
+    }
+
+    let volumen = limitarVolumen(CONFIG.musica.volumen);
+
+    $("nombreMusica").textContent = CONFIG.musica.nombre;
+
+    $("volumenMusica").value = Math.round(volumen * 100);
+
+    $("valorVolumen").textContent =
+      $("volumenMusica").value + "%";
+
+    musica.loop = Boolean(CONFIG.musica.repetir);
+
+    if (CONFIG.musica.archivo) {
+      musica.src = CONFIG.musica.archivo;
+    } else {
+      $("cajaMusica").hidden = true;
+    }
+
+    $("tituloAudio").textContent =
+      CONFIG.audioAdicional.titulo;
+
+    $("descripcionAudio").textContent =
+      CONFIG.audioAdicional.descripcion;
+
+    if (CONFIG.audioAdicional.archivo) {
+      audioDemo.src = CONFIG.audioAdicional.archivo;
+    } else {
+      $("cajaAudio").hidden = true;
+    }
+
+    if (
+      !CONFIG.musica.archivo &&
+      !CONFIG.audioAdicional.archivo
+    ) {
+      $("panelSonido").hidden = true;
+    } else if (
+      !CONFIG.musica.archivo ||
+      !CONFIG.audioAdicional.archivo
+    ) {
+      $("panelSonido").style.gridTemplateColumns = "1fr";
+    }
+
+    function reproduciendo(medio) {
+      return Boolean(
+        medio &&
+        !medio.paused &&
+        !medio.ended &&
+        !medio.error
+      );
+    }
+
+    function ajustarVolumen() {
+      const hayVideo =
+        Array.from(videos).some(reproduciendo);
+
+      const hayDemostracion =
+        reproduciendo(audioDemo) || hayVideo;
+
+      musica.volume = hayDemostracion
+        ? volumen * 0.15
+        : volumen;
+    }
+
+    function actualizarBotonMusica() {
+      const activa = reproduciendo(musica);
+
+      $("botonMusica").textContent = activa
+        ? "❚❚ Pausar música"
+        : "▶ Reproducir música";
+
+      $("botonMusica").setAttribute(
+        "aria-pressed",
+        String(activa)
+      );
+    }
+
+    $("botonMusica").onclick = async () => {
+      if (iniciandoMusica) {
+        return;
+      }
+
+      if (!musica.paused) {
+        musica.pause();
+        return;
+      }
+
+      iniciandoMusica = true;
+      $("botonMusica").disabled = true;
+
+      try {
+        ajustarVolumen();
+        await musica.play();
+        avisar("musica", "");
+      } catch {
+        avisar(
+          "musica",
+          "No se pudo reproducir audio.mp3. " +
+          "Comprueba que esté junto al HTML."
+        );
+      } finally {
+        iniciandoMusica = false;
+        $("botonMusica").disabled = false;
+        actualizarBotonMusica();
+      }
+    };
+
+    $("volumenMusica").oninput = () => {
+      volumen = Number($("volumenMusica").value) / 100;
+
+      $("valorVolumen").textContent =
+        $("volumenMusica").value + "%";
+
+      ajustarVolumen();
+    };
+
+    ["play", "pause", "ended"].forEach((evento) => {
+      musica.addEventListener(
+        evento,
+        actualizarBotonMusica
+      );
+    });
+
+    musica.addEventListener("error", () => {
+      actualizarBotonMusica();
+
+      avisar(
+        "musica",
+        "No se pudo cargar audio.mp3. Revisa su ubicación."
+      );
+    });
+
+    audioDemo.addEventListener("play", () => {
+      videos.forEach((video) => video.pause());
+      avisar("audio", "");
+      ajustarVolumen();
+    });
+
+    ["pause", "ended", "error"].forEach((evento) => {
+      audioDemo.addEventListener(evento, ajustarVolumen);
+    });
+
+    audioDemo.addEventListener("error", () => {
+      avisar(
+        "audio",
+        "No se pudo cargar el audio adicional."
+      );
+    });
+
+    $("pausarSonidos").onclick = () => {
+      musica.pause();
+      audioDemo.pause();
+      videos.forEach((video) => video.pause());
+
+      avisar(
+        "demo",
+        "Reproducción pausada. " +
+        "Pueden calibrar el programa Python."
+      );
+    };
+
+    ajustarVolumen();
+
+    // ========================================================
+    // C. FONDO Y ENVASE
+    // ========================================================
+
+    const oscuridad = Number(CONFIG.oscuridadFondo);
+
+    document.documentElement.style.setProperty(
+      "--oscuridad",
+      Number.isFinite(oscuridad)
+        ? Math.min(1, Math.max(0, oscuridad))
+        : 0.12
+    );
+
+    $("fotoFondo").style.objectPosition =
+      CONFIG.posicionFondo;
+
+    $("fotoFondo").onload = () => {
+      $("fotoFondo").hidden = false;
+      avisar("fondo", "");
+    };
+
+    $("fotoFondo").onerror = () => {
+      $("fotoFondo").hidden = true;
+
+      avisar(
+        "fondo",
+        "No se encontró fondo.jpg junto al HTML."
+      );
+    };
+
+    if (CONFIG.fondo) {
+      $("fotoFondo").src = CONFIG.fondo;
+    }
+
+    $("imagenEnvase").onload = () => {
+      $("imagenEnvase").hidden = false;
+      avisar("envase", "");
+    };
+
+    $("imagenEnvase").onerror = () => {
+      $("imagenEnvase").hidden = true;
+
+      avisar(
+        "envase",
+        "No se encontró envase.png junto al HTML."
+      );
+    };
+
+    if (CONFIG.envase) {
+      $("imagenEnvase").src = CONFIG.envase;
+    } else {
+      $("imagenEnvase").hidden = true;
+    }
+
+    // ========================================================
+    // D. INDICADORES
+    // ========================================================
+
+    DIAPOSITIVAS.forEach((datos, indice) => {
+      const boton = document.createElement("button");
+
+      boton.type = "button";
+      boton.className = "indicador";
+
+      boton.setAttribute(
+        "aria-label",
+        "Ir a la diapositiva " + (indice + 1)
+      );
+
+      boton.onclick = () => mostrar(indice);
+
+      $("indicadores").appendChild(boton);
+    });
+
+    // ========================================================
+    // E. MOSTRAR DIAPOSITIVA
+    // ========================================================
+
+    function mostrar(indice) {
+      if (indice < 0 || indice >= total) {
+        return;
+      }
+
+      actual = indice;
+
+      const datos = DIAPOSITIVAS[indice];
+
+      avisar("demo", "");
+
+      $("etiqueta").textContent = datos.etiqueta;
+      $("titulo").textContent = datos.titulo;
+      $("descripcion").textContent = datos.descripcion;
+
+      $("tarjetas").replaceChildren();
+
+      (datos.tarjetas || []).forEach((dato) => {
+        const tarjeta = document.createElement("article");
+        const titulo = document.createElement("h2");
+        const texto = document.createElement("p");
+
+        tarjeta.className = "tarjeta";
+        titulo.textContent = dato.titulo;
+        texto.textContent = dato.texto;
+
+        tarjeta.append(titulo, texto);
+        $("tarjetas").appendChild(tarjeta);
+      });
+
+      $("flujo").replaceChildren();
+      $("flujo").hidden = !datos.flujo?.length;
+
+      (datos.flujo || []).forEach((texto, posicion) => {
+        const etapa = document.createElement("li");
+        const numero = document.createElement("span");
+        const nombre = document.createElement("span");
+
+        numero.className = "paso";
+        numero.textContent = "PASO " + (posicion + 1);
+        nombre.textContent = texto;
+
+        etapa.append(numero, nombre);
+        $("flujo").appendChild(etapa);
+      });
+
+      mostrarTabla(datos.tabla);
+      mostrarMedios(datos.medios || []);
+
+      mostrarDocumentacion(
+        Boolean(datos.documentacion)
+      );
+
+      $("demoControles").hidden = !datos.demo;
+
+      $("contador").textContent =
+        (indice + 1) + " / " + total;
+
+      $("progreso").style.width =
+        ((indice + 1) / total * 100) + "%";
+
+      $("anterior").disabled = indice === 0;
+      $("siguiente").disabled = indice === total - 1;
+
+      Array.from($("indicadores").children).forEach(
+        (boton, posicion) => {
+          const activo = posicion === indice;
+
+          boton.classList.toggle("activo", activo);
+
+          if (activo) {
+            boton.setAttribute("aria-current", "step");
+          } else {
+            boton.removeAttribute("aria-current");
+          }
+        }
+      );
+
+      [$("contenido"), $("tarjetas")].forEach(
+        (elemento) => {
+          elemento.classList.remove("entrando");
+        }
+      );
+
+      void $("contenido").offsetWidth;
+
+      [$("contenido"), $("tarjetas")].forEach(
+        (elemento) => {
+          elemento.classList.add("entrando");
+        }
+      );
+    }
+
+    // ========================================================
+    // F. TABLA DE MAPEO
+    // ========================================================
+
+    function mostrarTabla(datos) {
+      const contenedor = $("contenedorTabla");
+
+      contenedor.replaceChildren();
+      contenedor.hidden = !datos;
+
+      if (!datos) {
+        return;
+      }
+
+      const tabla = document.createElement("table");
+      const cabecera = document.createElement("thead");
+      const filaCabecera = document.createElement("tr");
+      const cuerpo = document.createElement("tbody");
+
+      tabla.setAttribute(
+        "aria-label",
+        "Relación entre sonido y respuesta luminosa"
+      );
+
+      datos.columnas.forEach((texto) => {
+        const celda = document.createElement("th");
+
+        celda.scope = "col";
+        celda.textContent = texto;
+
+        filaCabecera.appendChild(celda);
+      });
+
+      cabecera.appendChild(filaCabecera);
+
+      datos.filas.forEach((filaDatos) => {
+        const fila = document.createElement("tr");
+
+        filaDatos.forEach((texto) => {
+          const celda = document.createElement("td");
+
+          celda.textContent = texto;
+          fila.appendChild(celda);
+        });
+
+        cuerpo.appendChild(fila);
+      });
+
+      tabla.append(cabecera, cuerpo);
+      contenedor.appendChild(tabla);
+    }
+
+    // ========================================================
+    // G. EVIDENCIAS SIN RECUADROS VACÍOS
+    //
+    // Si no hay archivo, no se crea ninguna tarjeta.
+    // Si un archivo falla al cargar, su tarjeta se elimina.
+    // ========================================================
+
+    function mostrarMedios(lista) {
+      videos.forEach((video) => video.pause());
+      videos.clear();
+
+      const galeria = $("galeria");
+
+      const disponibles = lista.filter((datos) => {
+        return String(
+          CONFIG.evidencias[datos.clave] || ""
+        ).trim();
+      });
+
+      galeria.replaceChildren();
+      galeria.hidden = disponibles.length === 0;
+
+      ajustarVolumen();
+
+      disponibles.forEach((datos) => {
+        const figura = document.createElement("figure");
+        const pie = document.createElement("figcaption");
+        const titulo = document.createElement("strong");
+        const descripcion = document.createElement("span");
+
+        const esVideo = datos.tipo === "video";
+
+        const medio = document.createElement(
+          esVideo ? "video" : "img"
+        );
+
+        figura.className = "evidencia";
+        titulo.textContent = datos.titulo;
+        descripcion.textContent = datos.pie;
+
+        pie.append(titulo, descripcion);
+
+        if (esVideo) {
+          medio.controls = true;
+          medio.preload = "metadata";
+          medio.playsInline = true;
+
+          medio.setAttribute(
+            "aria-label",
+            datos.titulo
+          );
+
+          videos.add(medio);
+
+          medio.addEventListener("play", () => {
+            audioDemo.pause();
+
+            videos.forEach((otro) => {
+              if (otro !== medio) {
+                otro.pause();
+              }
+            });
+
+            ajustarVolumen();
+          });
+
+          ["pause", "ended"].forEach((evento) => {
+            medio.addEventListener(
+              evento,
+              ajustarVolumen
+            );
+          });
+        } else {
+          medio.alt =
+            datos.titulo + ". " + datos.pie;
+        }
+
+        medio.addEventListener("error", () => {
+          if (!galeria.contains(figura)) {
+            return;
+          }
+
+          if (esVideo) {
+            medio.pause();
+            videos.delete(medio);
+          }
+
+          figura.remove();
+
+          galeria.hidden =
+            galeria.children.length === 0;
+
+          ajustarVolumen();
+        }, { once: true });
+
+        figura.append(medio, pie);
+        galeria.appendChild(figura);
+
+        medio.src =
+          CONFIG.evidencias[datos.clave];
+      });
+    }
+
+    // ========================================================
+    // H. DOCUMENTACIÓN GIT
+    // ========================================================
+
+    function mostrarDocumentacion(visible) {
+      $("documentacion").hidden = !visible;
+      $("enlaceRepositorio").replaceChildren();
+
+      if (!visible) {
+        return;
+      }
+
+      let urlValida = null;
+
+      try {
+        const url = new URL(CONFIG.repositorio);
+
+        if (
+          url.protocol === "https:" ||
+          url.protocol === "http:"
+        ) {
+          urlValida = url.href;
+        }
+      } catch {
+        // El enlace todavía está pendiente.
+      }
+
+      if (urlValida) {
+        const enlace = document.createElement("a");
+
+        enlace.className = "boton boton-lima";
+        enlace.href = urlValida;
+        enlace.target = "_blank";
+        enlace.rel = "noopener noreferrer";
+
+        enlace.textContent =
+          "↗ Abrir repositorio del proyecto";
+
+        $("enlaceRepositorio").appendChild(enlace);
+      } else {
+        const texto = document.createElement("p");
+
+        texto.textContent =
+          "Enlace pendiente: agrégalo en CONFIG.repositorio.";
+
+        $("enlaceRepositorio").appendChild(texto);
+      }
+    }
+
+    // ========================================================
+    // I. NAVEGACIÓN Y PANTALLA COMPLETA
+    // ========================================================
+
+    $("anterior").onclick =
+      () => mostrar(actual - 1);
+
+    $("siguiente").onclick =
+      () => mostrar(actual + 1);
+
+    document.addEventListener("keydown", (evento) => {
+      if (
+        evento.target instanceof HTMLElement &&
+        evento.target.closest(
+          "input, textarea, select, video, audio, [contenteditable]"
+        )
+      ) {
+        return;
+      }
+
+      if (
+        evento.altKey ||
+        evento.ctrlKey ||
+        evento.metaKey
+      ) {
+        return;
+      }
+
+      if (evento.key === "ArrowRight") {
+        evento.preventDefault();
+        mostrar(actual + 1);
+      }
+
+      if (evento.key === "ArrowLeft") {
+        evento.preventDefault();
+        mostrar(actual - 1);
+      }
+    });
+
+    $("botonPantalla").onclick = async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else {
+          await document.documentElement
+            .requestFullscreen();
+        }
+
+        avisar("pantalla", "");
+      } catch {
+        avisar(
+          "pantalla",
+          "El navegador no permitió activar la pantalla completa."
+        );
+      }
+    };
+
+    document.addEventListener(
+      "fullscreenchange",
+      () => {
+        $("botonPantalla").textContent =
+          document.fullscreenElement
+            ? "⛶ Salir"
+            : "⛶ Expandir";
+      }
+    );
+
+    if (!document.fullscreenEnabled) {
+      $("botonPantalla").hidden = true;
+    }
+
+    // ========================================================
+    // J. FRASES DEL ENVASE
+    // ========================================================
+
+    let indiceFrase = 0;
+    let temporizador = null;
+
+    const intervalo = Math.max(
+      1000,
+      Number(CONFIG.intervaloFrases) || 5000
+    );
+
+    function mostrarFrase() {
+      const datos = CONFIG.frases[indiceFrase];
+
+      $("globo").hidden = !datos;
+
+      if (!datos) {
+        return;
+      }
+
+      $("sonido").textContent = datos.sonido;
+      $("frase").textContent = datos.texto;
+      $("globo").style.background = datos.color;
+
+      $("globo").classList.remove("explotando");
+
+      void $("globo").offsetWidth;
+
+      $("globo").classList.add("explotando");
+    }
+
+    function actualizarFrases() {
+      clearInterval(temporizador);
+      temporizador = null;
+
+      if (
+        !efectosActivos ||
+        document.hidden ||
+        CONFIG.frases.length < 2
+      ) {
+        return;
+      }
+
+      temporizador = setInterval(() => {
+        indiceFrase =
+          (indiceFrase + 1) % CONFIG.frases.length;
+
+        mostrarFrase();
+      }, intervalo);
+    }
+
+    // ========================================================
+    // K. SERPENTINAS Y DESTELLOS
+    // ========================================================
+
+    const canvas = $("efectos");
+    const ctx = canvas.getContext("2d");
+
+    let ancho = innerWidth;
+    let alto = innerHeight;
+    let tiempo = 0;
+    let ultimoTiempo = null;
+    let animacion = null;
+
+    const azar = (minimo, maximo) =>
+      minimo + Math.random() * (maximo - minimo);
+
+    const colores = [
+      "#00dcff",
+      "#c6ff00",
+      "#a34dff",
+      "#ff6dc6",
+      "#ffffff"
+    ];
+
+    function cantidad(valor, maximo) {
+      return Math.min(
+        maximo,
+        Math.max(
+          0,
+          Math.floor(Number(valor) || 0)
+        )
+      );
+    }
+
+    const cintas = Array.from(
+      {
+        length: cantidad(CONFIG.serpentinas, 80)
+      },
+      () => ({
+        x: Math.random(),
+        y: Math.random(),
+        largo: azar(55, 135),
+        amplitud: azar(8, 20),
+        velocidad: azar(14, 34),
+        grosor: azar(3, 6),
+        fase: azar(0, Math.PI * 2),
+
+        color:
+          colores[
+            Math.floor(azar(0, colores.length))
+          ]
+      })
+    );
+
+    const brillos = Array.from(
+      {
+        length: cantidad(CONFIG.destellos, 150)
+      },
+      () => ({
+        x: Math.random(),
+        y: Math.random(),
+        radio: azar(3, 8),
+        fase: azar(0, Math.PI * 2),
+        velocidad: azar(0.7, 1.8),
+
+        color:
+          colores[
+            Math.floor(azar(0, colores.length))
+          ]
+      })
+    );
+
+    function ajustarCanvas() {
+      ancho = innerWidth;
+      alto = innerHeight;
+
+      const escala =
+        Math.min(devicePixelRatio || 1, 2);
+
+      canvas.width =
+        Math.round(ancho * escala);
+
+      canvas.height =
+        Math.round(alto * escala);
+
+      if (ctx) {
+        ctx.setTransform(
+          escala, 0,
+          0, escala,
+          0, 0
+        );
+      }
+
+      dibujar();
+    }
+
+    function estrella(
+      x,
+      y,
+      radio,
+      color,
+      opacidad
+    ) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      ctx.globalAlpha = opacidad;
+      ctx.fillStyle = color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 10;
+
+      ctx.beginPath();
+
+      for (let punto = 0; punto < 8; punto++) {
+        const angulo =
+          punto * Math.PI / 4 - Math.PI / 2;
+
+        const distancia =
+          punto % 2 === 0
+            ? radio
+            : radio * 0.28;
+
+        const px =
+          Math.cos(angulo) * distancia;
+
+        const py =
+          Math.sin(angulo) * distancia;
+
+        if (punto === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function dibujar() {
+      if (!ctx) {
+        return;
+      }
+
+      ctx.clearRect(0, 0, ancho, alto);
+
+      cintas.forEach((cinta) => {
+        const recorrido =
+          alto + cinta.largo + 140;
+
+        const y =
+          (
+            cinta.y * recorrido +
+            tiempo * cinta.velocidad
+          ) % recorrido - cinta.largo - 60;
+
+        const x =
+          cinta.x * ancho +
+          Math.sin(
+            tiempo * 0.45 + cinta.fase
+          ) * 25;
+
+        ctx.save();
+
+        ctx.strokeStyle = cinta.color;
+        ctx.lineWidth = cinta.grosor;
+        ctx.lineCap = "round";
+        ctx.globalAlpha = 0.85;
+
+        ctx.beginPath();
+
+        for (let paso = 0; paso <= 24; paso++) {
+          const proporcion = paso / 24;
+
+          const px =
+            x +
+            Math.sin(
+              proporcion * Math.PI * 3 +
+              cinta.fase +
+              tiempo
+            ) * cinta.amplitud;
+
+          const py =
+            y + proporcion * cinta.largo;
+
+          if (paso === 0) {
+            ctx.moveTo(px, py);
+          } else {
+            ctx.lineTo(px, py);
+          }
+        }
+
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      brillos.forEach((brillo) => {
+        const pulso = (
+          Math.sin(
+            tiempo * brillo.velocidad +
+            brillo.fase
+          ) + 1
+        ) / 2;
+
+        estrella(
+          brillo.x * ancho,
+          brillo.y * alto,
+          brillo.radio * (0.55 + pulso * 0.6),
+          brillo.color,
+          0.2 + pulso * 0.75
+        );
+      });
+    }
+
+    function animar(marcaTiempo) {
+      animacion = null;
+
+      if (
+        !efectosActivos ||
+        document.hidden
+      ) {
+        ultimoTiempo = null;
+        return;
+      }
+
+      if (ultimoTiempo !== null) {
+        tiempo += Math.min(
+          (marcaTiempo - ultimoTiempo) / 1000,
+          0.05
+        );
+      }
+
+      ultimoTiempo = marcaTiempo;
+
+      dibujar();
+
+      animacion =
+        requestAnimationFrame(animar);
+    }
+
+    // ========================================================
+    // L. ACTIVAR O PAUSAR EFECTOS VISUALES
+    // ========================================================
+
+    function actualizarEfectos() {
+      if (animacion !== null) {
+        cancelAnimationFrame(animacion);
+        animacion = null;
+      }
+
+      ultimoTiempo = null;
+
+      document.body.classList.toggle(
+        "pausado",
+        !efectosActivos
+      );
+
+      $("botonEfectos").setAttribute(
+        "aria-pressed",
+        String(efectosActivos)
+      );
+
+      $("botonEfectos").textContent =
+        efectosActivos
+          ? "✦ Efectos: sí"
+          : "✦ Efectos: pausa";
+
+      actualizarFrases();
+      dibujar();
+
+      if (
+        efectosActivos &&
+        !document.hidden &&
+        ctx
+      ) {
+        animacion =
+          requestAnimationFrame(animar);
+      }
+    }
+
+    $("botonEfectos").onclick = () => {
+      efectosActivos = !efectosActivos;
+      actualizarEfectos();
+    };
+
+    preferencia.addEventListener(
+      "change",
+      (evento) => {
+        efectosActivos = !evento.matches;
+        actualizarEfectos();
+      }
+    );
+
+    document.addEventListener(
+      "visibilitychange",
+      actualizarEfectos
+    );
+
+    window.addEventListener(
+      "resize",
+      ajustarCanvas
+    );
+
+    // ========================================================
+    // M. INICIAR PRESENTACIÓN
+    // ========================================================
+
+    if (total > 0) {
+      mostrar(0);
+    } else {
+      $("titulo").textContent =
+        "Agrega tu primera diapositiva.";
+
+      $("anterior").disabled = true;
+      $("siguiente").disabled = true;
+    }
+
+    mostrarFrase();
+    ajustarCanvas();
+    actualizarEfectos();
+  </script>
+
+</body>
+</html>
